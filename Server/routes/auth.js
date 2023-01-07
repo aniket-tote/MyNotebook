@@ -1,13 +1,15 @@
 const express = require("express");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/User");
+const fetchUser = require("../middleware/fetchUser");
 var jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 
 const router = express.Router();
 
-const JWT_SECRET = "thisisjwtsecret"
+const JWT_SECRET = "thisisjwtsecret";
 
+//creating the user
 router.post(
   "/signup",
   [
@@ -42,23 +44,73 @@ router.post(
         email: req.body.email,
         password: secPass,
       });
-      
+
       //send response
       const data = {
-        user:{
-            id:user.id
-        }
-      }
-      const authtoken = jwt.sign(data,JWT_SECRET)
+        user: {
+          id: user.id,
+        },
+      };
+      const authtoken = jwt.sign(data, JWT_SECRET);
 
-      res.json(authtoken);
-
-
+      res.json({ authtoken });
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Some error occured");
+      res.status(500).send("Some error occured: Its not you its us!");
     }
   }
 );
+
+//authenticate a user
+router.post(
+  "/login",
+  [
+    //validate values
+    body("email", "Enter a valid email.").isEmail(),
+    body("password", "Password cannot be blank.").exists(),
+  ],
+  async (req, res) => {
+    //send bad request and error for invalid values
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    //extract email and password from request body
+    const { email, password } = req.body;
+
+    try {
+      //check for email
+      let user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "Email not registered yet!" });
+      }
+      const passwordCompare = await bcryptjs.compare(password, user.password);
+      if (!passwordCompare) {
+        return res.status(400).json({ error: "Incorrect Credentials." });
+      }
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authtoken = jwt.sign(data, JWT_SECRET);
+      res.json({ authtoken });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Some error occured: Its not you its us!");
+    }
+  }
+);
+
+router.post("/getuser", fetchUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId).select("-password");
+    res.send(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Some error occured: Its not you its us!");
+  }
+});
 
 module.exports = router;

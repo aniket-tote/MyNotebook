@@ -9,7 +9,7 @@ const router = express.Router();
 
 const JWT_SECRET = "thisisjwtsecret";
 
-//creating the user
+//Route 1:creating the user
 router.post(
   "/signup",
   [
@@ -61,7 +61,7 @@ router.post(
   }
 );
 
-//authenticate a user
+//Route 2:authenticate a user
 router.post(
   "/login",
   [
@@ -102,6 +102,7 @@ router.post(
   }
 );
 
+//Route 3: Get user data using token authentication
 router.post("/getuser", fetchUser, async (req, res) => {
   try {
     const userId = req.user.id;

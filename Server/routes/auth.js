@@ -103,7 +103,7 @@ router.post(
 );
 
 //Route 3: Get user data using token authentication
-router.post("/getuser", fetchUser, async (req, res) => {
+router.get("/getuser", fetchUser, async (req, res) => {
   try {
     const userId = req.user.id;
     const user = await User.findById(userId).select("-password");

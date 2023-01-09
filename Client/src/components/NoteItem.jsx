@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardHeader,
@@ -8,28 +7,53 @@ import {
   Text,
   Button,
   Tag,
-  Flex,
 } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import noteContext from "../context/notes/noteContext";
+import { useToast } from "@chakra-ui/react";
+
 const NoteItem = (props) => {
+  const context = useContext(noteContext);
+  const { deleteNote } = context;
+  const toast = useToast();
+
   return (
-    <Card shadow={"2xl"} height={"max-content"} margin={2} width={"max-content"}>
+    <Card
+      shadow={"2xl"}
+      height={"max-content"}
+      margin={2}
+      width={["90vw", "31%"]}
+    >
       <CardHeader flexDirection={"column"} experimental_spaceY={2}>
         <Heading size="md">{props.note.title}</Heading>
-        <Flex flexWrap={"wrap"}>
-          <Tag borderRadius={"full"} margin={1}>
-            {props.note.tag}
-          </Tag>
-          <Tag borderRadius={"full"} margin={1}>
-            {props.note.tag}
-          </Tag>
-        </Flex>
+        <Tag borderRadius={"full"} margin={1}>
+          {props.note.tag}
+        </Tag>
       </CardHeader>
       <CardBody>
         <Text>{props.note.description}</Text>
       </CardBody>
-      <CardFooter>
-        <Button>Delete</Button>
-        <Button>Update</Button>
+      <CardFooter justifyContent={"center"} experimental_spaceX={2}>
+        <Button
+          experimental_spaceX={2}
+          onClick={() => {
+            deleteNote(props.note._id);
+            toast({
+              title: "Note deleted",
+              status: "error",
+              duration: 2000,
+              isClosable: true,
+            });
+          }}
+        >
+          <Text>Delete</Text>
+          <DeleteIcon />
+        </Button>
+        <Button experimental_spaceX={2}>
+          <Text>Update</Text>
+          <EditIcon />
+        </Button>
       </CardFooter>
     </Card>
   );

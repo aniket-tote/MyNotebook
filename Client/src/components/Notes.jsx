@@ -4,10 +4,11 @@ import NoteItem from "./NoteItem";
 import noteContext from "../context/notes/noteContext";
 
 const Notes = () => {
-  const a = useContext(noteContext);
+  const context = useContext(noteContext);
+  const {notes} = context;
   return (
     <Flex width={"70vw"} flexWrap={"wrap"} flexDirection={["column", "row"]} paddingX={4}>
-      {a.notes.map((element) => {
+      {notes.map((element) => {
         return <NoteItem key={element._id} note={element} />;
       })}
     </Flex>

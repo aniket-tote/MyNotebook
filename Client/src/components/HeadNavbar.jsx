@@ -1,7 +1,7 @@
-import { Flex, IconButton, useColorMode, Text,  } from "@chakra-ui/react";
+import { Flex, IconButton, useColorMode, Text } from "@chakra-ui/react";
 import { SunIcon, MoonIcon, HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { Link,useLocation } from "react-router-dom";
-import React, { useState,useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
 
 export default function HeadNavbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -12,14 +12,14 @@ export default function HeadNavbar() {
   return (
     <Flex
       height={"16"}
-      width={"100vw"}
       alignItems={"center"}
-      paddingX={"4"}
+      paddingX={4}
       justifyContent={"space-between"}
-      backgroundColor={colorMode === "dark" ? "gray.900" : "gray.50"}
+      backgroundColor={colorMode === "dark" ? "gray.900" : "white"}
     >
       <IconButton
         fontSize={15}
+        borderRadius={"full"}
         display={["inline", "none"]}
         variant={"unstyled"}
         onClick={() => setNavOpen(navOpen ? false : true)}
@@ -33,18 +33,33 @@ export default function HeadNavbar() {
         experimental_spaceX={[0, 4]}
         experimental_spaceY={[4, 0]}
         position={["absolute", "relative"]}
-        backgroundColor={colorMode === "dark" ? "gray.800" : "#fff"}
+        backgroundColor={[
+          colorMode === "dark" ? "gray.700" : "#fff",
+          colorMode === "dark" ? "gray.900" : "white",
+        ]}
         top={[16, 0]}
-        width={["100%", "max-content"]}
+        width={["100vw", "max-content"]}
         left={navOpen ? 0 : "auto"}
         padding={4}
         right={[navOpen ? "auto" : "100%", "auto"]}
+        zIndex={"1"}
       >
-        <Link to="/" className={location.pathname==="/" ? "text-blue-500":""} onClick={() => setNavOpen(false)}>
+        <Link
+          to="/"
+          className={location.pathname === "/" ? "text-blue-500" : ""}
+          onClick={() => setNavOpen(false)}
+        >
           Home
         </Link>
-        <Link to="/addnote" className={location.pathname==="/addnote" ? "text-blue-500":""}  onClick={() => setNavOpen(false)}>
-          Add Note
+        <Link
+          to="/about"
+          className={location.pathname === "/about" ? "text-blue-500" : ""}
+          onClick={() => {
+            setNavOpen(false);
+            console.log("about");
+          }}
+        >
+          About
         </Link>
       </Flex>
 

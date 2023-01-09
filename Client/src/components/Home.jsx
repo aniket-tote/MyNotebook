@@ -1,11 +1,27 @@
-import React from 'react'
+import { Box, Divider, Flex, Text } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import Addnote from "./Addnote";
+import Notes from "./Notes";
 
 const Home = () => {
-  return (
-    <div>
-      This is home
-    </div>
-  )
-}
 
-export default Home
+  return (
+    <Flex paddingTop={4} flexDirection={["column", "row"]}>
+      <Flex
+        flexDirection={"column"}
+        width={["100vw", "100vw", "30vw"]}
+        alignItems={"center"}
+        paddingX={4}
+        experimental_spaceY={4}
+        display={["none","flex"]}
+      >
+        <Text fontSize={30}>Add a new Note</Text>
+        <Addnote />
+      </Flex>
+      <Divider orientation={"vertical"} display={["none","flex"]} height={"75vh"}/>
+      <Notes />
+    </Flex>
+  );
+};
+
+export default Home;

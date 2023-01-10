@@ -1,89 +1,77 @@
 import NoteContext from "./noteContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const NoteState = (props) => {
-  const notesInitial = [
-    {
-      _id: "63b9caf4eea3517c4a190db6",
-      user: "63b9b14221f7dbf5feee821b",
-      title: "title1",
-      description:
-        "description1description1description1description1description1description1description1description1description1description1description1description1description1",
-      tag: "testing",
-      date: "2023-01-07T19:41:40.013Z",
-      __v: 0,
-    },
-    {
-      _id: "63b9caf5eea3517c4a190db8",
-      user: "63b9b14221f7dbf5feee821b",
-      title: "title2",
-      description:
-        "description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2",
-      tag: "testing",
-      date: "2023-01-07T19:41:41.321Z",
-      __v: 0,
-    },
-    {
-      _id: "63b9caf6eea3517c4a190dba",
-      user: "63b9b14221f7dbf5feee821b",
-      title: "title3",
-      description:
-        "description3description3description3description3description3description3description3description3description3description3description3description3",
-      tag: "testing",
-      date: "2023-01-07T19:41:42.179Z",
-      __v: 0,
-    },
-    {
-      _id: "63b9caf4eea3517c4a190db7",
-      user: "63b9b14221f7dbf5feee821b",
-      title: "title4",
-      description:
-        "description1description1description1description1description1description1description1description1description1description1description1description1description1",
-      tag: "testing",
-      date: "2023-01-07T19:41:40.013Z",
-      __v: 0,
-    },
-    {
-      _id: "63b9caf5eea3517c4a190db9",
-      user: "63b9b14221f7dbf5feee821b",
-      title: "title5",
-      description:
-        "description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2description2",
-      tag: "testing",
-      date: "2023-01-07T19:41:41.321Z",
-      __v: 0,
-    },
-    {
-      _id: "63b9caf6eea3517c4a190dbb",
-      user: "63b9b14221f7dbf5feee821b",
-      title: "title6",
-      description:
-        "description3description3description3description3description3description3description3description3description3description3description3description3",
-      tag: "testing",
-      date: "2023-01-07T19:41:42.179Z",
-      __v: 0,
-    },
-  ];
+  const notesInitial = [];
+  const host = "http://localhost:5000";
 
   const [notes, setNotes] = useState(notesInitial);
   // const update = (param) => { change parent state from chidren
   //   setState(param);
   // };
 
-  const addNote = (title, description, tag) => {
-    const note = {
-      _id: "63b9caf6eea3517c4a190dbb",
-      user: "63b9b14221f7dbf5feee821b",
-      title: title,
-      description: description,
-      tag: tag,
-      date: "2023-01-07T19:41:42.179Z",
-      __v: 0,
-    };
-    setNotes(notes.concat(note));
+  const getAllNote = async () => {
+    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNiYTVmN2EzMzY4NDhjOGExMjQ0YWNkIn0sImlhdCI6MTY3MzE2MjkxM30.iXznEVW4fMpKIsxiE6-fOAjIgvCf3UJ7e5cyHPfMc0A",
+      },
+    });
+    const json = await response.json();
+    setNotes(json);
   };
-  const updateNote = () => {};
-  const deleteNote = (id) => {
+
+  const addNote = async (title, description, tag) => {
+    const response = await fetch(`${host}/api/notes/addnote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNiYTVmN2EzMzY4NDhjOGExMjQ0YWNkIn0sImlhdCI6MTY3MzE2MjkxM30.iXznEVW4fMpKIsxiE6-fOAjIgvCf3UJ7e5cyHPfMc0A",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+    const json = await response.json();
+    setNotes(notes.concat(json));
+  };
+  const updateNote = async (id, title, description, tag) => {
+    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNiYTVmN2EzMzY4NDhjOGExMjQ0YWNkIn0sImlhdCI6MTY3MzE2MjkxM30.iXznEVW4fMpKIsxiE6-fOAjIgvCf3UJ7e5cyHPfMc0A",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+    const json = await response.json();
+    console.log(json);
+
+    let newNote = JSON.parse(JSON.stringify(notes));
+    for (let index = 0; index < newNote.length; index++) {
+      const element = newNote[index];
+      if (element._id === id) {
+        (newNote[index].title = title),
+          (newNote[index].description = description),
+          (newNote[index].tag = tag);
+        break;
+      }
+    }
+    setNotes(newNote);
+  };
+  const deleteNote = async (id) => {
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNiYTVmN2EzMzY4NDhjOGExMjQ0YWNkIn0sImlhdCI6MTY3MzE2MjkxM30.iXznEVW4fMpKIsxiE6-fOAjIgvCf3UJ7e5cyHPfMc0A",
+      },
+    });
+    const json = await response.json();
+    console.log(json);
     setNotes(
       notes.filter((note) => {
         return note._id !== id;
@@ -91,7 +79,9 @@ const NoteState = (props) => {
     );
   };
   return (
-    <NoteContext.Provider value={{ notes, addNote, updateNote, deleteNote }}>
+    <NoteContext.Provider
+      value={{ notes, getAllNote, addNote, updateNote, deleteNote }}
+    >
       {props.children}
     </NoteContext.Provider>
   );

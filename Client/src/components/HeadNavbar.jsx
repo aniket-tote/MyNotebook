@@ -28,7 +28,6 @@ export default function HeadNavbar() {
       <Text fontSize={20}>MyNoteBook</Text>
 
       <Flex
-        className="transition-all duration-500 ease-in-out"
         flexDirection={["column", "row"]}
         experimental_spaceX={[0, 4]}
         experimental_spaceY={[4, 0]}
@@ -56,7 +55,6 @@ export default function HeadNavbar() {
           className={location.pathname === "/about" ? "text-blue-500" : ""}
           onClick={() => {
             setNavOpen(false);
-            console.log("about");
           }}
         >
           About

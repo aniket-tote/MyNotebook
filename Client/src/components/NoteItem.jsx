@@ -17,6 +17,9 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Alert,
+  AlertIcon,
+  AlertTitle,
 } from "@chakra-ui/react";
 import React, { useContext, useRef, useState } from "react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
@@ -24,33 +27,67 @@ import noteContext from "../context/notes/noteContext";
 import { useToast, useDisclosure } from "@chakra-ui/react";
 
 const NoteItem = (props) => {
+  
+  //context
   const context = useContext(noteContext);
   const { deleteNote, updateNote } = context;
+
+  //for toast
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const initialRef = useRef(null);
-  const closeRef = useRef(null);
   const toast = useToast();
 
+  //referances for modal
+  const initialRef = useRef(null);
+  const closeRef = useRef(null);
+
+  //edited note state
   const [enote, setEnote] = useState({
     etitle: props.note.title,
     edescription: props.note.description,
     etag: props.note.tag,
   });
 
+  //alert states
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  //onclick update button in modal
   const handleupdate = (e) => {
     e.preventDefault();
-    updateNote(props.note._id, enote.etitle, enote.edescription, enote.etag);
+
+    //check for title more than 3 char
+    if (!(enote.etitle.length >= 3)) {
+      setAlertVisible(true);
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+      setAlertMessage("Title should be at least 3 char!");
+      return;
+    }
+
+    // check for title more than 5 char
+    if (!(enote.edescription.length >= 5)) {
+      setAlertVisible(true);
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+      setAlertMessage("Description should be at least 5 char!");
+      return;
+    }
+
+    updateNote(props.note._id, enote.etitle, enote.edescription, enote.etag); //updateNote context
+
     toast({
       title: "Note updated",
       status: "success",
       duration: 2000,
       isClosable: true,
     });
-    closeRef.current.click();
+    closeRef.current.click(); //to click close button using reference
   };
 
   const onchange = (e) => {
-    setEnote({ ...enote, [e.target.name]: e.target.value });
+    setEnote({ ...enote, [e.target.name]: e.target.value }); //update edited note state as soon as user types in input tags
   };
 
   return (
@@ -58,7 +95,7 @@ const NoteItem = (props) => {
       shadow={"2xl"}
       height={"max-content"}
       margin={2}
-      width={["90vw", "31%"]}
+      width={["90vw", "31.78%"]}
     >
       <CardHeader flexDirection={"column"} experimental_spaceY={2}>
         <Heading size="md">{props.note.title}</Heading>
@@ -90,6 +127,8 @@ const NoteItem = (props) => {
           <EditIcon />
         </Button>
       </CardFooter>
+
+      {/* Model */}
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -126,6 +165,14 @@ const NoteItem = (props) => {
               />
             </FormControl>
           </ModalBody>
+
+          {/* alert  */}
+          {alertVisible && (
+            <Alert status="warning" width={"max-content"} alignSelf={"center"}>
+              <AlertIcon />
+              <AlertTitle>{alertMessage}</AlertTitle>
+            </Alert>
+          )}
 
           <ModalFooter>
             <Button onClick={onClose}>Cancel</Button>

@@ -1,5 +1,5 @@
-import { Box, Divider, Flex, Text } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import { Divider, Flex, Text } from "@chakra-ui/react";
+import React from "react";
 import Addnote from "./Addnote";
 import Notes from "./Notes";
 

@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
   Card,
   CardBody,
@@ -8,51 +10,69 @@ import {
   FormLabel,
   Input,
   Stack,
+  useToast,
   Textarea,
+  AlertTitle,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import noteContext from "../context/notes/noteContext";
-import { useToast } from "@chakra-ui/react";
 
 const Addnote = () => {
+  //context
   const context = useContext(noteContext);
   const { addNote } = context;
-  const toast = useToast();
 
+  const toast = useToast(); //toast
+
+  //note state
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
 
+  //alert states
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
   const handlesubmit = (e) => {
+    //on submit click
     e.preventDefault();
-    addNote(note.title, note.description, note.tag);
+
+    //check for title more than 3 char
+    if (!(note.title.length >= 3)) {
+      setAlertVisible(true);
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+      setAlertMessage("Title should be at least 3 char!");
+      return;
+    }
+
+    // check for title more than 5 char
+    if (!(note.description.length >= 5)) {
+      setAlertVisible(true);
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+      setAlertMessage("Description should be at least 5 char!");
+      return;
+    }
+
+    addNote(note.title, note.description, note.tag); //addnote context funtion
+
     toast({
       title: "Note added",
       status: "success",
       duration: 2000,
       isClosable: true,
     });
+
+    setNote({ title: "", description: "", tag: "" }); //reset note state && empty input value
   };
 
   const onchange = (e) => {
-    setNote({ ...note, [e.target.name]: e.target.value });
+    setNote({ ...note, [e.target.name]: e.target.value }); //update state when user input values
   };
 
-  //for multiple tags
-  // const [tagState, setTagState] = useState([]);
-
-  // const addtag = (e) => {
-  //   if (e.key !== "Enter") return;
-  //   const value = e.target.value;
-  //   if (!value.trim()) return;
-  //   setTagState([...tagState, value]);
-  //   e.target.value = "";
-  // };
-
-  // const removeTag = (index) => {
-  //   setTagState(tagState.filter((el, i) => i !== index));
-  // };
-
   return (
-    <Card maxW="sm" shadow={"2xl"} width={"100%"}>
+    <Card maxW="sm" shadow={"2xl"} width={"100%"} paddingBottom={4}>
       <CardBody>
         <Stack spacing="3">
           <FormControl isRequired>
@@ -61,6 +81,8 @@ const Addnote = () => {
               placeholder="title here..."
               id="title"
               name="title"
+              value={note.title}
+              minLength={3}
               onChange={onchange}
             />
           </FormControl>
@@ -71,35 +93,21 @@ const Addnote = () => {
               placeholder="note here..."
               id="description"
               name="description"
+              value={note.description}
+              minLength={5}
               onChange={onchange}
             />
           </FormControl>
           <FormControl>
             <FormLabel>Tags</FormLabel>
             <Input
-              // onKeyDown={addtag}
               placeholder={"tag to categorize"}
               id="tag"
               name="tag"
+              value={note.tag}
               onChange={onchange}
             />
           </FormControl>
-          {/* <Flex flexWrap={"wrap"}>
-            {tagState.map((element, index) => {
-              return (
-                <Tag
-                  size="lg"
-                  borderRadius="full"
-                  margin={1}
-                  width={"max-content"}
-                  key={index}
-                >
-                  <TagLabel>{element}</TagLabel>
-                  <TagCloseButton onClick={() => removeTag(index)} />
-                </Tag>
-              );
-            })}
-          </Flex> */}
         </Stack>
       </CardBody>
       <Divider />
@@ -113,6 +121,14 @@ const Addnote = () => {
           Add note
         </Button>
       </CardFooter>
+
+      {/* alert  */}
+      {alertVisible && (
+        <Alert status="warning" width={"max-content"} alignSelf={"center"}>
+          <AlertIcon />
+          <AlertTitle>{alertMessage}</AlertTitle>
+        </Alert>
+      )}
     </Card>
   );
 };

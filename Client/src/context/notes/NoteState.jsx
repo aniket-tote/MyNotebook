@@ -1,14 +1,11 @@
 import NoteContext from "./noteContext";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const NoteState = (props) => {
   const notesInitial = [];
   const host = "http://localhost:5000";
 
   const [notes, setNotes] = useState(notesInitial);
-  // const update = (param) => { change parent state from chidren
-  //   setState(param);
-  // };
 
   const getAllNote = async () => {
     const response = await fetch(`${host}/api/notes/fetchallnotes`, {
@@ -24,6 +21,7 @@ const NoteState = (props) => {
   };
 
   const addNote = async (title, description, tag) => {
+    tag === "" && (tag = "general");
     const response = await fetch(`${host}/api/notes/addnote`, {
       method: "POST",
       headers: {
@@ -34,8 +32,10 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
+    console.log(json);
     setNotes(notes.concat(json));
   };
+
   const updateNote = async (id, title, description, tag) => {
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
       method: "PUT",

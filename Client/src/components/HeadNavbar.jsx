@@ -51,21 +51,16 @@ export default function HeadNavbar() {
       </Link>
 
       <Flex
-        flexDirection={["column", "column", "row"]}
-        experimental_spaceX={[0, 0, 4]}
-        experimental_spaceY={[4, 4, 0]}
+        flexDirection={"column"}
+        experimental_spaceY={4}
         display={["flex", "flex", "none"]}
-        position={["absolute", "absolute", "relative"]}
-        backgroundColor={[
-          colorMode === "dark" ? "gray.700" : "#fff",
-          colorMode === "dark" ? "gray.700" : "#fff",
-          colorMode === "dark" ? "gray.900" : "white",
-        ]}
-        top={[16, 16, 0]}
-        width={["100vw", "100vw", "max-content"]}
+        position={"absolute"}
+        backgroundColor={colorMode === "dark" ? "gray.700" : "#fff"}
+        top={16}
+        width={"100vw"}
         left={navOpen ? 0 : "auto"}
         padding={4}
-        right={[navOpen ? "auto" : "100%", navOpen ? "auto" : "100%", "auto"]}
+        right={navOpen ? "auto" : "100%"}
         zIndex={"1"}
       >
         <Link
@@ -87,20 +82,7 @@ export default function HeadNavbar() {
       </Flex>
 
       <Flex experimental_spaceX={4}>
-        {!localStorage.getItem("token") ? (
-          <Flex experimental_spaceX={4}>
-            <Link to="/signup">
-              <Button colorScheme="blue" variant="ghost">
-                Sign Up
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button colorScheme="blue" variant="ghost">
-                Login
-              </Button>
-            </Link>
-          </Flex>
-        ) : (
+        {localStorage.getItem("token") && (
           <Link to="/login">
             <Button colorScheme="blue" variant="ghost" onClick={logout}>
               Logout

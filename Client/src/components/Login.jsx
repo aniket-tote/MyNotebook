@@ -7,6 +7,7 @@ import {
   FormErrorMessage,
   useToast,
   Input,
+  Text,
 } from "@chakra-ui/react";
 import React from "react";
 import { Field, Form, Formik } from "formik";
@@ -134,7 +135,16 @@ const Login = () => {
             </Form>
           )}
         </Formik>
-        <Link to="/signup">Not Registered yet! Sign up here. </Link>
+        <Link to="/signup">
+          Not Registered yet! Sign up{" "}
+          <Text
+            display={"inline"}
+            textColor={"blue.500"}
+            textDecoration={"underline"}
+          >
+            here.
+          </Text>{" "}
+        </Link>
       </Flex>
     </Flex>
   );

@@ -62,6 +62,11 @@ const NoteState = (props) => {
     setNotes(newNote);
   };
   const deleteNote = async (id) => {
+    setNotes(
+      notes.filter((note) => {
+        return note._id !== id;
+      })
+    );
     const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
       method: "DELETE",
       headers: {
@@ -72,11 +77,6 @@ const NoteState = (props) => {
     });
     const json = await response.json();
     console.log(json);
-    setNotes(
-      notes.filter((note) => {
-        return note._id !== id;
-      })
-    );
   };
   return (
     <NoteContext.Provider

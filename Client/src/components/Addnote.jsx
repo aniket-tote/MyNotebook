@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import noteContext from "../context/notes/noteContext";
-import { Field, Form, Formik } from 'formik';
 
 const Addnote = () => {
   //context
@@ -73,62 +72,16 @@ const Addnote = () => {
     setNote({ ...note, [e.target.name]: e.target.value }); //update state when user input values
   };
 
-  function validateName(value) {
-    let error;
-    if (!value) {
-      error = "Title is required";
-    } else if (value.length < 3 ) {
-      error = "Title should be at least 3 char";
-    }
-    return error;
-  }
-
   return (
     <Card maxW="sm" shadow={"2xl"} width={"100%"} paddingBottom={4}>
       <CardBody>
         <Stack spacing="3">
-          <Formik
-            onSubmit={(values, actions) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                actions.setSubmitting(false);
-              }, 1000);
-            }}
-          >
-            {(props) => (
-              <Form>
-                <Field name="name" validate={validateName}>
-                  {({ field, form }) => (
-                    <FormControl
-                      isInvalid={form.errors.name && form.touched.name}
-                      isRequired
-                    >
-                      <FormLabel>Title</FormLabel>
-                      <Input {...field} placeholder="title here" />
-                      <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                    </FormControl>
-                  )}
-                </Field>
-                <Button
-                  mt={4}
-                  variant="solid"
-                  colorScheme="blue"
-                  isLoading={props.isSubmitting}
-                  type="submit"
-                >
-                  Submit
-                </Button>
-              </Form>
-            )}
-          </Formik>
           <FormControl isRequired>
             <FormLabel>Title</FormLabel>
             <Input
               placeholder="title here..."
-              id="title"
               name="title"
               value={note.title}
-              minLength={3}
               onChange={onchange}
             />
           </FormControl>
@@ -137,7 +90,6 @@ const Addnote = () => {
             <Textarea
               rows={5}
               placeholder="note here..."
-              id="description"
               name="description"
               value={note.description}
               minLength={5}
@@ -148,7 +100,6 @@ const Addnote = () => {
             <FormLabel>Tags</FormLabel>
             <Input
               placeholder={"tag to categorize"}
-              id="tag"
               name="tag"
               value={note.tag}
               onChange={onchange}

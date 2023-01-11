@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
-const mongoURI = "mongodb://127.0.0.1:27017/MyNotebook";
+require("dotenv").config();
 
-mongoose.set("strictQuery",true);
+const pass = process.env.ATLAS;
+const mongoURI = `mongodb+srv://anikettote:${pass}@mynotebookcluster.08xnkyj.mongodb.net/MyNotebook?retryWrites=true&w=majority`;
+
+mongoose.set("strictQuery", true);
 
 const connectToMongo = () => {
   mongoose.connect(mongoURI, () => {

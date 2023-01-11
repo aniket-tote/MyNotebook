@@ -6,6 +6,7 @@ import NoteState from "./context/notes/NoteState";
 import { Flex } from "@chakra-ui/react";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import ForgotPassword from "./components/ForgotPassword";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route exact path="/addnote" element={<About />}></Route>
             <Route exact path="/login" element={<Login />}></Route>
             <Route exact path="/signup" element={<Signup />}></Route>
+            <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
           </Routes>
         </Router>
       </NoteState>

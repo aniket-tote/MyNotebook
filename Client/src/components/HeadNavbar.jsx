@@ -1,6 +1,13 @@
-import { Flex, IconButton, useColorMode, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  IconButton,
+  useColorMode,
+  useToast,
+  Text,
+  Button,
+} from "@chakra-ui/react";
 import { SunIcon, MoonIcon, HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 
 export default function HeadNavbar() {
@@ -8,6 +15,19 @@ export default function HeadNavbar() {
   const [navOpen, setNavOpen] = useState(false);
 
   let location = useLocation();
+  let navigate = useNavigate();
+  const toast = useToast();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    toast({
+      title: "See you soon!",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+    navigate("/login");
+  };
 
   return (
     <Flex
@@ -15,6 +35,7 @@ export default function HeadNavbar() {
       alignItems={"center"}
       paddingX={4}
       justifyContent={"space-between"}
+      shadow={"2xl"}
       backgroundColor={colorMode === "dark" ? "gray.900" : "white"}
     >
       <IconButton
@@ -25,7 +46,9 @@ export default function HeadNavbar() {
         onClick={() => setNavOpen(navOpen ? false : true)}
         icon={navOpen ? <CloseIcon /> : <HamburgerIcon />}
       />
-      <Text fontSize={20}>MyNoteBook</Text>
+      <Link to="/">
+        <Text fontSize={20}>MyNoteBook</Text>
+      </Link>
 
       <Flex
         flexDirection={["column", "column", "row"]}
@@ -63,11 +86,34 @@ export default function HeadNavbar() {
         </Link>
       </Flex>
 
-      <IconButton
-        borderRadius={"100%"}
-        onClick={() => toggleColorMode()}
-        icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
-      />
+      <Flex experimental_spaceX={4}>
+        {!localStorage.getItem("token") ? (
+          <Flex experimental_spaceX={4}>
+            <Link to="/signup">
+              <Button colorScheme="blue" variant="ghost">
+                Sign Up
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button colorScheme="blue" variant="ghost">
+                Login
+              </Button>
+            </Link>
+          </Flex>
+        ) : (
+          <Link to="/login">
+            <Button colorScheme="blue" variant="ghost" onClick={logout}>
+              Logout
+            </Button>
+          </Link>
+        )}
+
+        <IconButton
+          borderRadius={"100%"}
+          onClick={() => toggleColorMode()}
+          icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
+        />
+      </Flex>
     </Flex>
   );
 }

@@ -13,9 +13,9 @@ const Notes = () => {
 
   return (
     <Flex
-      width={"70vw"}
+      width={["100vw","100vw","70vw"]}
       flexWrap={"wrap"}
-      flexDirection={["column", "row"]}
+      flexDirection={["column",,"column", "row"]}
       paddingX={4}
     >
       {notes.map((element) => {

@@ -13,7 +13,7 @@ function App() {
           <HeadNavbar />
           <Routes>
             <Route exact path="/" element={<Home />}></Route>
-            <Route exact path="/about" element={<About />}></Route>
+            <Route exact path="/addnote" element={<About />}></Route>
           </Routes>
         </Router>
       </NoteState>

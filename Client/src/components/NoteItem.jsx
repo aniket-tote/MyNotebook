@@ -95,7 +95,7 @@ const NoteItem = (props) => {
       shadow={"2xl"}
       height={"max-content"}
       margin={2}
-      width={["90vw", "31.78%"]}
+      width={["95%","97%","97%","47.7%","48%" ,"31.78%"]}
     >
       <CardHeader flexDirection={"column"} experimental_spaceY={2}>
         <Heading size="md">{props.note.title}</Heading>

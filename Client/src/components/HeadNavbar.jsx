@@ -20,7 +20,7 @@ export default function HeadNavbar() {
       <IconButton
         fontSize={15}
         borderRadius={"full"}
-        display={["inline", "none"]}
+        display={["inline", "inline", "none"]}
         variant={"unstyled"}
         onClick={() => setNavOpen(navOpen ? false : true)}
         icon={navOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -28,19 +28,21 @@ export default function HeadNavbar() {
       <Text fontSize={20}>MyNoteBook</Text>
 
       <Flex
-        flexDirection={["column", "row"]}
-        experimental_spaceX={[0, 4]}
-        experimental_spaceY={[4, 0]}
-        position={["absolute", "relative"]}
+        flexDirection={["column", "column", "row"]}
+        experimental_spaceX={[0, 0, 4]}
+        experimental_spaceY={[4, 4, 0]}
+        display={["flex", "flex", "none"]}
+        position={["absolute", "absolute", "relative"]}
         backgroundColor={[
+          colorMode === "dark" ? "gray.700" : "#fff",
           colorMode === "dark" ? "gray.700" : "#fff",
           colorMode === "dark" ? "gray.900" : "white",
         ]}
-        top={[16, 0]}
-        width={["100vw", "max-content"]}
+        top={[16, 16, 0]}
+        width={["100vw", "100vw", "max-content"]}
         left={navOpen ? 0 : "auto"}
         padding={4}
-        right={[navOpen ? "auto" : "100%", "auto"]}
+        right={[navOpen ? "auto" : "100%", navOpen ? "auto" : "100%", "auto"]}
         zIndex={"1"}
       >
         <Link
@@ -51,13 +53,13 @@ export default function HeadNavbar() {
           Home
         </Link>
         <Link
-          to="/about"
-          className={location.pathname === "/about" ? "text-blue-500" : ""}
+          to="/addnote"
+          className={location.pathname === "/addnote" ? "text-blue-500" : ""}
           onClick={() => {
             setNavOpen(false);
           }}
         >
-          About
+          Add Note
         </Link>
       </Flex>
 

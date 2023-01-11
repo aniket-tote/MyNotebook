@@ -1,11 +1,19 @@
 import { Flex, Text } from "@chakra-ui/react";
 import React from "react";
+import Addnote from "./Addnote";
 
 const About = () => {
   return (
-    <Flex>
-      <Text fontSize={30}>About page</Text>
-    </Flex>
+    <Flex
+        flexDirection={"column"}
+        width={["100vw", "100vw", "30vw"]}
+        alignItems={"center"}
+        paddingX={4}
+        experimental_spaceY={4}
+      >
+        <Text fontSize={30}>Add a new Note</Text>
+        <Addnote />
+      </Flex>
   );
 };
 

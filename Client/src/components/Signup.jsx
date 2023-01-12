@@ -154,7 +154,7 @@ const Signup = () => {
           )}
         </Formik>
         <Link to="/login">
-          Already Signed Up! Log in to click{" "}
+          Already Signed Up! Log{" "}
           <Text
             display={"inline"}
             textColor={"blue.500"}

@@ -1,3 +1,4 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertIcon,
@@ -11,17 +12,23 @@ import {
   Input,
   Stack,
   useToast,
+  Flex,
   Textarea,
   AlertTitle,
-  FormErrorMessage,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  TagLeftIcon,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import noteContext from "../context/notes/noteContext";
 
 const Addnote = () => {
   //context
   const context = useContext(noteContext);
-  const { addNote } = context;
+  const { addNote, notes, getAllNote } = context;
+
+  const unique = [...new Set(notes.map((item) => item.tag))];
 
   const toast = useToast(); //toast
 
@@ -68,6 +75,10 @@ const Addnote = () => {
     setNote({ title: "", description: "", tag: "" }); //reset note state && empty input value
   };
 
+  function addtag(element) {
+    setNote({ ...note, tag: element });
+  }
+
   const onchange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value }); //update state when user input values
   };
@@ -105,9 +116,31 @@ const Addnote = () => {
               onChange={onchange}
             />
           </FormControl>
+
+          <Flex flexWrap={"wrap"} width={"100%"}>
+            {unique.map((element) => {
+              return (
+                <Tag
+                  key={element}
+                  borderRadius="full"
+                  variant="subtle"
+                  colorScheme="blue"
+                  margin={1}
+                  cursor={"pointer"}
+                  onClick={() => {
+                    addtag(element);
+                  }}
+                >
+                  <TagLeftIcon as={AddIcon} />
+                  <TagLabel>{element}</TagLabel>
+                </Tag>
+              );
+            })}
+          </Flex>
         </Stack>
       </CardBody>
       <Divider />
+
       <CardFooter justifyContent={"center"}>
         <Button
           type="submit"

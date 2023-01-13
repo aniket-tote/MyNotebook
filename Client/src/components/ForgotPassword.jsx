@@ -1,15 +1,26 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   return (
     <Flex
-      fontSize={"9xl"}
-      justifyContent={"center"}
+      fontSize={"xl"}
+      paddingX={64}
+      justifyContent={"end"}
       alignItems={"center"}
       height={"calc(100vh - 4rem)"}
     >
-      Chutiya
+      <Link to="/signup">
+        Create new account{" "}
+        <Text
+          display={"inline"}
+          textColor={"blue.500"}
+          textDecoration={"underline"}
+        >
+          here.
+        </Text>
+      </Link>
     </Flex>
   );
 };

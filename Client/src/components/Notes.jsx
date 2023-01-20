@@ -1,4 +1,13 @@
-import { Flex, Spinner, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Spinner,
+  Text,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import NoteItem from "./NoteItem";
 import noteContext from "../context/notes/noteContext";
@@ -8,6 +17,8 @@ const Notes = () => {
   const [loading, setLoading] = useState(true);
   const context = useContext(noteContext);
   const { notes, getAllNote } = context;
+
+  const uniqueTags = [...new Set(notes.map((item) => item.tag))];
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -44,9 +55,30 @@ const Notes = () => {
           <Spinner />
         </Flex>
       )}
-      {notes.map((element) => {
-        return <NoteItem key={element._id} note={element} />;
-      })}
+      <Tabs width={"100%"} overflowX={"auto"}>
+        <TabList>
+          <Tab>All</Tab>
+          {uniqueTags.map((tag) => (
+            <Tab key={tag}>{tag}</Tab>
+          ))}
+        </TabList>
+        <TabPanels>
+          <TabPanel display={"flex"} flexWrap={"wrap"}>
+            {notes.map((element) => {
+              return <NoteItem key={element._id} note={element} />;
+            })}
+          </TabPanel>
+          {uniqueTags.map((tag) => (
+            <TabPanel p={4} key={tag}>
+              {notes.map((element) => {
+                if (element.tag === tag) {
+                  return <NoteItem key={element._id} note={element} />;
+                }
+              })}
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
     </Flex>
   );
 };

@@ -26,7 +26,7 @@ import noteContext from "../context/notes/noteContext";
 const Addnote = () => {
   //context
   const context = useContext(noteContext);
-  const { addNote, notes, getAllNote } = context;
+  const { addNote, notes } = context;
 
   const unique = [...new Set(notes.map((item) => item.tag))];
 

@@ -27,7 +27,6 @@ import noteContext from "../context/notes/noteContext";
 import { useToast, useDisclosure } from "@chakra-ui/react";
 
 const NoteItem = (props) => {
-  
   //context
   const context = useContext(noteContext);
   const { deleteNote, updateNote } = context;
@@ -95,7 +94,7 @@ const NoteItem = (props) => {
       shadow={"2xl"}
       height={"max-content"}
       margin={2}
-      width={["95%","97%","97%","47.7%","48%" ,"31.78%"]}
+      width={["95%", "97%", "97%", "46.7%", "48%", "30.78%"]}
     >
       <CardHeader flexDirection={"column"} experimental_spaceY={2}>
         <Heading size="md">{props.note.title}</Heading>

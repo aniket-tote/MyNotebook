@@ -52,33 +52,34 @@ const Notes = () => {
               Add Notes
             </Text>
           </Link>
-          <Spinner />
         </Flex>
       )}
-      <Tabs width={"100%"} overflowX={"auto"}>
-        <TabList>
-          <Tab>All</Tab>
-          {uniqueTags.map((tag) => (
-            <Tab key={tag}>{tag}</Tab>
-          ))}
-        </TabList>
-        <TabPanels>
-          <TabPanel display={"flex"} flexWrap={"wrap"}>
-            {notes.map((element) => {
-              return <NoteItem key={element._id} note={element} />;
-            })}
-          </TabPanel>
-          {uniqueTags.map((tag) => (
-            <TabPanel p={4} key={tag}>
+      {notes.length !== 0 && (
+        <Tabs width={"100%"} overflowX={"auto"}>
+          <TabList>
+            <Tab>All</Tab>
+            {uniqueTags.map((tag) => (
+              <Tab key={tag}>{tag}</Tab>
+            ))}
+          </TabList>
+          <TabPanels>
+            <TabPanel display={"flex"} flexWrap={"wrap"}>
               {notes.map((element) => {
-                if (element.tag === tag) {
-                  return <NoteItem key={element._id} note={element} />;
-                }
+                return <NoteItem key={element._id} note={element} />;
               })}
             </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+            {uniqueTags.map((tag) => (
+              <TabPanel p={4} key={tag}>
+                {notes.map((element) => {
+                  if (element.tag === tag) {
+                    return <NoteItem key={element._id} note={element} />;
+                  }
+                })}
+              </TabPanel>
+            ))}
+          </TabPanels>
+        </Tabs>
+      )}
     </Flex>
   );
 };

@@ -23,6 +23,7 @@ export default function HeadNavbar() {
     toast({
       title: "See you soon!",
       status: "success",
+      position: "top",
       duration: 2000,
       isClosable: true,
     });

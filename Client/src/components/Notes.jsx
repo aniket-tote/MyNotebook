@@ -69,7 +69,7 @@ const Notes = () => {
               })}
             </TabPanel>
             {uniqueTags.map((tag) => (
-              <TabPanel p={4} key={tag}>
+              <TabPanel display={"flex"} flexWrap={"wrap"} p={4} key={tag}>
                 {notes.map((element) => {
                   if (element.tag === tag) {
                     return <NoteItem key={element._id} note={element} />;

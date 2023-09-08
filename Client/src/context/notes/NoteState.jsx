@@ -30,7 +30,6 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
-    console.log(json);
     setNotes(notes.concat(json));
   };
 
@@ -44,7 +43,6 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
-    console.log(json);
 
     let newNote = JSON.parse(JSON.stringify(notes));
     for (let index = 0; index < newNote.length; index++) {
@@ -72,7 +70,6 @@ const NoteState = (props) => {
       },
     });
     const json = await response.json();
-    console.log(json);
   };
   return (
     <NoteContext.Provider

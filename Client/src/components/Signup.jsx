@@ -89,6 +89,7 @@ const Signup = () => {
               toast({
                 title: "You can log in now!",
                 status: "success",
+                position: "top",
                 duration: 2000,
                 isClosable: true,
               });
@@ -96,6 +97,7 @@ const Signup = () => {
               toast({
                 title: json.error,
                 status: "error",
+                position: "top",
                 duration: 2000,
                 isClosable: true,
               });

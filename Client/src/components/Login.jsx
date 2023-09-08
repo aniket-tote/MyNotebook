@@ -80,6 +80,7 @@ const Login = () => {
               toast({
                 title: "Welcome back!",
                 status: "success",
+                position: "top",
                 duration: 2000,
                 isClosable: true,
               });
@@ -87,6 +88,7 @@ const Login = () => {
               toast({
                 title: json.error,
                 status: "error",
+                position: "top",
                 duration: 2000,
                 isClosable: true,
               });

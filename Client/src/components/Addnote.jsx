@@ -68,6 +68,7 @@ const Addnote = () => {
     toast({
       title: "Note added",
       status: "success",
+      position: "top",
       duration: 2000,
       isClosable: true,
     });

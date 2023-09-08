@@ -20,9 +20,13 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
+  Textarea,
+  Flex,
+  IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import React, { useContext, useRef, useState } from "react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, CopyIcon } from "@chakra-ui/icons";
 import noteContext from "../context/notes/noteContext";
 import { useToast, useDisclosure } from "@chakra-ui/react";
 
@@ -79,6 +83,7 @@ const NoteItem = (props) => {
     toast({
       title: "Note updated",
       status: "success",
+      position: "top",
       duration: 2000,
       isClosable: true,
     });
@@ -89,6 +94,32 @@ const NoteItem = (props) => {
     setEnote({ ...enote, [e.target.name]: e.target.value }); //update edited note state as soon as user types in input tags
   };
 
+  const renderWithLineBreaks = (text) => {
+    const lines = text.split("\n");
+    return lines.map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+  };
+
+  const copyToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    toast({
+      title: "copied",
+      status: "success",
+      duration: 1000,
+      position: "top",
+      isClosable: true,
+    });
+  };
+
   return (
     <Card
       shadow={"2xl"}
@@ -97,14 +128,21 @@ const NoteItem = (props) => {
       width={["95%", "97%", "97%", "46.7%", "48%", "30.78%"]}
     >
       <CardHeader flexDirection={"column"} experimental_spaceY={2}>
-        <Heading size="md">{props.note.title}</Heading>
+        <Flex width={["100%"]} justifyContent={"space-between"}>
+          <Heading size="md">{props.note.title}</Heading>
+          <Tooltip hasArrow label="Copy">
+            <IconButton
+              isRound={true}
+              onClick={() => copyToClipboard(props.note.description)}
+              icon={<CopyIcon />}
+            ></IconButton>
+          </Tooltip>
+        </Flex>
         <Tag borderRadius={"full"} margin={1}>
           {props.note.tag}
         </Tag>
       </CardHeader>
-      <CardBody>
-        <Text>{props.note.description}</Text>
-      </CardBody>
+      <CardBody>{renderWithLineBreaks(props.note.description)}</CardBody>
       <CardFooter justifyContent={"center"} experimental_spaceX={2}>
         <Button
           experimental_spaceX={2}
@@ -113,6 +151,7 @@ const NoteItem = (props) => {
             toast({
               title: "Note deleted",
               status: "error",
+              position: "top",
               duration: 2000,
               isClosable: true,
             });
@@ -147,7 +186,7 @@ const NoteItem = (props) => {
 
             <FormControl mt={4}>
               <FormLabel>Description</FormLabel>
-              <Input
+              <Textarea
                 value={enote.edescription}
                 id="edescription"
                 name="edescription"

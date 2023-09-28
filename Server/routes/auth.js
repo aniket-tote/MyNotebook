@@ -7,7 +7,7 @@ const { body, validationResult } = require("express-validator");
 
 const router = express.Router();
 
-const JWT_SECRET = "thisisjwtsecret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 //Route 1:creating the user
 router.post(

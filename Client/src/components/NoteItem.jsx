@@ -24,6 +24,13 @@ import {
   Flex,
   IconButton,
   Tooltip,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogCloseButton,
+  AlertDialogBody,
+  AlertDialogFooter,
 } from "@chakra-ui/react";
 import React, { useContext, useRef, useState } from "react";
 import { DeleteIcon, EditIcon, CopyIcon } from "@chakra-ui/icons";
@@ -39,9 +46,30 @@ const NoteItem = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  //
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+
+  const onCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+  const onOpenUpdateModal = () => {
+    setIsUpdateModalOpen(true);
+  };
+
+  const onCloseAlertDialog = () => {
+    setIsAlertDialogOpen(false);
+  };
+
+  const onOpenAlertDialog = () => {
+    setIsAlertDialogOpen(true);
+  };
+
   //referances for modal
   const initialRef = useRef(null);
   const closeRef = useRef(null);
+  const cancelRef = React.useRef();
 
   //edited note state
   const [enote, setEnote] = useState({
@@ -144,30 +172,22 @@ const NoteItem = (props) => {
       </CardHeader>
       <CardBody>{renderWithLineBreaks(props.note.description)}</CardBody>
       <CardFooter justifyContent={"center"} experimental_spaceX={2}>
-        <Button
-          experimental_spaceX={2}
-          onClick={() => {
-            deleteNote(props.note._id);
-            toast({
-              title: "Note deleted",
-              status: "error",
-              position: "top",
-              duration: 2000,
-              isClosable: true,
-            });
-          }}
-        >
+        <Button experimental_spaceX={2} onClick={onOpenAlertDialog}>
           <Text>Delete</Text>
           <DeleteIcon />
         </Button>
-        <Button experimental_spaceX={2} onClick={onOpen}>
+        <Button experimental_spaceX={2} onClick={onOpenUpdateModal}>
           <Text>Update</Text>
           <EditIcon />
         </Button>
       </CardFooter>
 
-      {/* Model */}
-      <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
+      {/* update Model */}
+      <Modal
+        initialFocusRef={initialRef}
+        isOpen={isUpdateModalOpen}
+        onClose={onCloseUpdateModal}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Edit your Note</ModalHeader>
@@ -213,7 +233,7 @@ const NoteItem = (props) => {
           )}
 
           <ModalFooter>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onCloseUpdateModal}>Cancel</Button>
             <Button
               colorScheme="blue"
               ml={3}
@@ -225,6 +245,45 @@ const NoteItem = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {/* delete alert */}
+      <AlertDialog
+        motionPreset="slideInBottom"
+        leastDestructiveRef={cancelRef}
+        onClose={onCloseAlertDialog}
+        isOpen={isAlertDialogOpen}
+        isCentered
+        size={"xs"}
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>Delete Note</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>kr du?</AlertDialogBody>
+          <AlertDialogFooter>
+            <Button ref={cancelRef} onClick={onCloseAlertDialog}>
+              Nai
+            </Button>
+            <Button
+              colorScheme="red"
+              ml={3}
+              onClick={() => {
+                deleteNote(props.note._id);
+                toast({
+                  title: "Note deleted",
+                  status: "error",
+                  position: "top",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              }}
+            >
+              Haa krde
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };

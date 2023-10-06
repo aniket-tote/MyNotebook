@@ -42,6 +42,12 @@ const Signup = () => {
     return error;
   }
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <Flex
       justifyContent={"space-around"}
@@ -67,7 +73,9 @@ const Signup = () => {
           initialValues={{ name: "", email: "", password: "" }}
           onSubmit={async (values, actions) => {
             const response = await fetch(
-              `https://bright-pumps-crab.cyclic.app/api/auth/signup`,
+              `${
+                import.meta.env.VITE_REACT_APP_SERVER_BASE_URL
+              }/api/auth/signup`,
               {
                 method: "POST",
                 headers: {

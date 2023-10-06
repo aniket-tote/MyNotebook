@@ -22,8 +22,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState, useEffect } from "react";
 import noteContext from "../context/notes/noteContext";
+import { useNavigate } from "react-router-dom";
 
 const Addnote = () => {
+  let navigate = useNavigate();
   //context
   const context = useContext(noteContext);
   const { addNote, notes } = context;
@@ -84,8 +86,14 @@ const Addnote = () => {
     setNote({ ...note, [e.target.name]: e.target.value }); //update state when user input values
   };
 
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
-    <Card maxW="sm" shadow={"2xl"} width={"100%"} paddingBottom={4}>
+    <Card shadow={"lg"} width={"100%"} paddingBottom={4}>
       <CardBody>
         <Stack spacing="3">
           <FormControl isRequired>

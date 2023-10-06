@@ -3,8 +3,7 @@ import React, { useState } from "react";
 
 const NoteState = (props) => {
   const notesInitial = [];
-  const host = "https://bright-pumps-crab.cyclic.app";
-
+  const host = import.meta.env.VITE_REACT_APP_SERVER_BASE_URL;
   const [notes, setNotes] = useState(notesInitial);
 
   const getAllNote = async () => {

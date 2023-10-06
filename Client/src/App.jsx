@@ -7,6 +7,7 @@ import { Flex } from "@chakra-ui/react";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -19,7 +20,12 @@ function App() {
             <Route exact path="/addnote" element={<About />}></Route>
             <Route exact path="/login" element={<Login />}></Route>
             <Route exact path="/signup" element={<Signup />}></Route>
-            <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
+            <Route
+              exact
+              path="/forgotpassword"
+              element={<ForgotPassword />}
+            ></Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </NoteState>

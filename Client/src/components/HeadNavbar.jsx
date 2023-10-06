@@ -32,21 +32,36 @@ export default function HeadNavbar() {
 
   return (
     <Flex
+      position={"sticky"}
+      top={0}
+      zIndex={10}
       height={"16"}
       alignItems={"center"}
       paddingX={4}
       justifyContent={"space-between"}
-      shadow={"2xl"}
+      shadow={"lg"}
       backgroundColor={colorMode === "dark" ? "gray.900" : "white"}
     >
-      <IconButton
-        fontSize={15}
-        borderRadius={"full"}
-        display={["inline", "inline", "none"]}
-        variant={"unstyled"}
-        onClick={() => setNavOpen(navOpen ? false : true)}
-        icon={navOpen ? <CloseIcon /> : <HamburgerIcon />}
-      />
+      <div
+        className={`hamburger w-5 flex cursor-pointer items-center flex-col space-y-1 md:hidden mr-2`}
+        onClick={() => setNavOpen(!navOpen)}
+      >
+        <div
+          className={`ham h-1 w-4 rounded duration-500 transition-transform origin-left ease-in-out ${
+            navOpen ? "rotate-45" : "rotate-0"
+          } ${colorMode === "dark" ? "bg-white" : "bg-slate-900"}`}
+        ></div>
+        <div
+          className={`bur w-[1.39rem] h-1 rounded duration-500 transition-transform ease-in-out ${
+            navOpen ? " -rotate-45" : "rotate-0"
+          } ${colorMode === "dark" ? "bg-white" : "bg-slate-900"}`}
+        ></div>
+        <div
+          className={`ger h-1 w-4 rounded duration-500 transition-transform origin-right ease-in-out ${
+            navOpen ? "rotate-45" : "rotate-0"
+          } ${colorMode === "dark" ? "bg-white" : "bg-slate-900"}`}
+        ></div>
+      </div>
       <Link to="/">
         <Text fontSize={20}>MyNoteBook</Text>
       </Link>
@@ -56,12 +71,13 @@ export default function HeadNavbar() {
         experimental_spaceY={4}
         display={["flex", "flex", "none"]}
         position={"absolute"}
+        left={0}
         backgroundColor={colorMode === "dark" ? "gray.700" : "#fff"}
         top={16}
         width={"100vw"}
-        left={navOpen ? 0 : "auto"}
         padding={4}
-        right={navOpen ? "auto" : "100%"}
+        transition={"0.5s ease-in-out transform"}
+        transform={navOpen ? "translateX(0)" : "translateX(-100%)"}
         zIndex={"1"}
       >
         <Link

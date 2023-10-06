@@ -9,7 +9,7 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Field, Form, Formik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -32,6 +32,12 @@ const Login = () => {
     }
     return error;
   }
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Flex
@@ -58,7 +64,9 @@ const Login = () => {
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values, actions) => {
             const response = await fetch(
-              `https://bright-pumps-crab.cyclic.app/api/auth/login`,
+              `${
+                import.meta.env.VITE_REACT_APP_SERVER_BASE_URL
+              }/api/auth/login`,
               {
                 method: "POST",
                 headers: {

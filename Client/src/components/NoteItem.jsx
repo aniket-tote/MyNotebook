@@ -31,6 +31,8 @@ import {
   AlertDialogCloseButton,
   AlertDialogBody,
   AlertDialogFooter,
+  Link,
+  Box,
 } from "@chakra-ui/react";
 import React, { useContext, useRef, useState } from "react";
 import { DeleteIcon, EditIcon, CopyIcon } from "@chakra-ui/icons";
@@ -123,13 +125,36 @@ const NoteItem = (props) => {
   };
 
   const renderWithLineBreaks = (text) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
     const lines = text.split("\n");
-    return lines.map((line, index) => (
-      <React.Fragment key={index}>
-        {line}
-        <br />
-      </React.Fragment>
-    ));
+
+    return lines.map((line, index) => {
+      const lineWithLinks = line.split(urlRegex).map((segment, i) => {
+        if (segment.match(urlRegex)) {
+          return (
+            <Tooltip hasArrow label="Open link">
+              <Link
+                to={segment}
+                textDecoration={"underline"}
+                textColor={"blue.400"}
+                key={i}
+                target="_blank"
+              >
+                {segment}
+              </Link>
+            </Tooltip>
+          );
+        }
+        return segment;
+      });
+
+      return (
+        <Box key={index}>
+          {lineWithLinks}
+          <br />
+        </Box>
+      );
+    });
   };
 
   const copyToClipboard = (text) => {
@@ -150,10 +175,10 @@ const NoteItem = (props) => {
 
   return (
     <Card
-      shadow={"2xl"}
+      shadow={"lg"}
       height={"max-content"}
       margin={2}
-      width={["95%", "97%", "97%", "46.7%", "48%", "30.78%"]}
+      width={["100%", "97%", "97%", "46.7%", "48%", "30.78%"]}
     >
       <CardHeader flexDirection={"column"} experimental_spaceY={2}>
         <Flex width={["100%"]} justifyContent={"space-between"}>
@@ -170,7 +195,9 @@ const NoteItem = (props) => {
           {props.note.tag}
         </Tag>
       </CardHeader>
-      <CardBody>{renderWithLineBreaks(props.note.description)}</CardBody>
+      <CardBody>
+        <Box>{renderWithLineBreaks(props.note.description)}</Box>
+      </CardBody>
       <CardFooter justifyContent={"center"} experimental_spaceX={2}>
         <Button experimental_spaceX={2} onClick={onOpenAlertDialog}>
           <Text>Delete</Text>

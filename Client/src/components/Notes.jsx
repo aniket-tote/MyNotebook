@@ -7,6 +7,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  useColorMode,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import NoteItem from "./NoteItem";
@@ -17,6 +18,7 @@ const Notes = () => {
   const [loading, setLoading] = useState(true);
   const context = useContext(noteContext);
   const { notes, getAllNote } = context;
+  const { colorMode } = useColorMode();
 
   const uniqueTags = [...new Set(notes.map((item) => item.tag))];
   let navigate = useNavigate();
@@ -32,10 +34,10 @@ const Notes = () => {
 
   return (
     <Flex
-      width={["100vw", "100vw", "70vw"]}
+      width={["100%", "100%", "50%", "70%"]}
       flexWrap={"wrap"}
       flexDirection={["column", , "column", "row"]}
-      paddingX={4}
+      padding={4}
     >
       {loading && <Spinner />}
       {notes.length === 0 && (
@@ -56,20 +58,38 @@ const Notes = () => {
       )}
       {notes.length !== 0 && (
         <Tabs width={"100%"} overflowX={"auto"}>
-          <TabList>
+          <TabList
+            position={"sticky"}
+            top={0}
+            zIndex={5}
+            backgroundColor={colorMode === "dark" ? "#1A202C" : "#fff"}
+          >
             <Tab>All</Tab>
             {uniqueTags.map((tag) => (
               <Tab key={tag}>{tag}</Tab>
             ))}
           </TabList>
           <TabPanels>
-            <TabPanel display={"flex"} flexWrap={"wrap"}>
+            <TabPanel
+              display={"flex"}
+              flexWrap={"wrap"}
+              overflowY={"auto"}
+              className="scrollbar-thin"
+              height={"80vh"}
+            >
               {notes.map((element) => {
                 return <NoteItem key={element._id} note={element} />;
               })}
             </TabPanel>
             {uniqueTags.map((tag) => (
-              <TabPanel display={"flex"} flexWrap={"wrap"} p={4} key={tag}>
+              <TabPanel
+                display={"flex"}
+                flexWrap={"wrap"}
+                key={tag}
+                overflowY={"auto"}
+                className="scrollbar-thin"
+                height={"80vh"}
+              >
                 {notes.map((element) => {
                   if (element.tag === tag) {
                     return <NoteItem key={element._id} note={element} />;

@@ -5,13 +5,13 @@ import Notes from "./Notes";
 
 const Home = () => {
   return (
-    <Flex paddingTop={4} flexDirection={["column", "column", "row"]}>
+    <Flex>
       <Flex
         flexDirection={"column"}
-        width={["100vw", "100vw", "30vw"]}
         alignItems={"center"}
-        paddingX={4}
+        padding={12}
         experimental_spaceY={4}
+        width={["100%", "100%", "50%", "30%"]}
         display={["none", "none", "flex"]}
       >
         <Text fontSize={24}>Add a new Note</Text>

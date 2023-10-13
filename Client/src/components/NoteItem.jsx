@@ -134,7 +134,7 @@ const NoteItem = (props) => {
           return (
             <Tooltip hasArrow label="Open link">
               <Link
-                to={segment}
+                href={segment}
                 textDecoration={"underline"}
                 textColor={"blue.400"}
                 key={i}

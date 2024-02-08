@@ -1,14 +1,20 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
 
-const pass = process.env.ATLAS;
-const mongoURI = `mongodb+srv://anikettote:${pass}@mynotebookcluster.08xnkyj.mongodb.net/MyNotebook?retryWrites=true&w=majority`;
+const mongoURI = process.env.ATLAS_URL;
 
 mongoose.set("strictQuery", true);
 
-const connectToMongo = () => {
-  mongoose.connect(mongoURI, () => {
-    console.log("connected to mongodb");
-  });
+const connectToMongo = async () => {
+  try {
+    await mongoose.connect(mongoURI, (error) => {
+      if (error) {
+        return new Error("Failed to connect to database");
+      }
+      console.log("connected to mongodb");
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
+
 module.exports = connectToMongo;

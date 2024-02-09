@@ -36,7 +36,7 @@ const loginUser = async (req, res) => {
     const passwordCompare = await bcryptjs.compare(password, user.password);
 
     if (!passwordCompare) {
-      throw new Error("Incorrect Credentials.");
+      res.status(400).json({ success: false, message: "Incorrect Credentials." });
     }
 
     const data = {

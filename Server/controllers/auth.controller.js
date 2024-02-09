@@ -64,27 +64,28 @@ const requestPasswordReset = async (req, res) => {
     let resetToken = await addToken(user._id);
 
     const link = `${process.env.CLIENT_URL}/forgotpassword?token=${resetToken}&id=${user._id}`;
-    const success = sendEmail(user.email, "Password Reset Request", `
-    <html>
-    <head>
-        <style>
+    const success = await sendEmail(user.email, "Password Reset Request", `
+      <html>
+        <head>
+          <style>
 
-        </style>
-    </head>
-    <body>
-        <p>Hi ${user.name},</p>
-        <p>You requested to reset your password.</p>
-        <p> Please, click the link below to reset your password</p>
-        <a href="${link}">Reset Password</a>
-    </body>
-</html>
+          </style>
+        </head>
+        <body>
+          <p>Hi ${user.name},</p>
+          <p>You requested to reset your password.</p>
+          <p> Please, click the link below to reset your password</p>
+          <a href="${link}">Reset Password</a>
+        </body>
+      </html>
     `);
-    if(success){
+
+    if (success) {
       res.status(200).json({ success, message: "Mail to reset your password has been sent to you." });
-    }else{
+    } else {
       res
-      .status(500)
-      .json({ success: false, message: "Some issues to send mail. Please try again after some time" });
+        .status(500)
+        .json({ success: false, message: "Some issues to send mail. Please try again after some time" });
     }
 
   } catch (error) {

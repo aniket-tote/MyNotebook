@@ -62,11 +62,9 @@ const requestPasswordReset = async (req, res) => {
     let user = await getUserByEmail(email);
 
     let resetToken = await addToken(user._id);
-    console.log(resetToken)
 
     const link = `${process.env.CLIENT_URL}/forgotpassword?token=${resetToken}&id=${user._id}`;
-    console.log(link);
-    sendEmail(user.email, "Password Reset Request", `
+    const success = sendEmail(user.email, "Password Reset Request", `
     <html>
     <head>
         <style>
@@ -81,7 +79,13 @@ const requestPasswordReset = async (req, res) => {
     </body>
 </html>
     `);
-    res.status(200).json({ success: true, message: "Mail to reset your password has been sent to you." });
+    if(success){
+      res.status(200).json({ success, message: "Mail to reset your password has been sent to you." });
+    }else{
+      res
+      .status(500)
+      .json({ success: false, message: "Some issues to send mail. Please try again after some time" });
+    }
 
   } catch (error) {
     console.error(error.message);
@@ -103,7 +107,6 @@ const resetPassword = async (req, res) => {
   }
 
   const user = await updateUserPassword(userId, password);
-  console.log(user)
 
   sendEmail(
     user.email,

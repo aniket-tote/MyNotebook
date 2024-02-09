@@ -7,37 +7,41 @@ const NoteState = (props) => {
   const [notes, setNotes] = useState(notesInitial);
 
   const getAllNote = async () => {
-    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+    const response = await fetch(`${host}/api/notes/by-user`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
     const json = await response.json();
-    setNotes(json);
+    if(json.success){
+      setNotes(json.notes);
+    }
   };
 
   const addNote = async (title, description, tag) => {
     tag === "" && (tag = "general");
-    const response = await fetch(`${host}/api/notes/addnote`, {
+    const response = await fetch(`${host}/api/notes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
-    setNotes(notes.concat(json));
+    if(json.success){
+      setNotes(notes.concat(json.note));
+    }
   };
 
   const updateNote = async (id, title, description, tag) => {
-    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+    const response = await fetch(`${host}/api/notes/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -61,11 +65,11 @@ const NoteState = (props) => {
         return note._id !== id;
       })
     );
-    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+    const response = await fetch(`${host}/api/notes/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
     const json = await response.json();

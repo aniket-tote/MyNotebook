@@ -75,7 +75,7 @@ const Signup = () => {
             const response = await fetch(
               `${
                 import.meta.env.VITE_REACT_APP_SERVER_BASE_URL
-              }/api/auth/signup`,
+              }/auth/signup`,
               {
                 method: "POST",
                 headers: {
@@ -90,7 +90,6 @@ const Signup = () => {
             );
             const json = await response.json();
             actions.setSubmitting(false);
-            console.log(json);
             if (json.success) {
               localStorage.setItem("token", json.authtoken);
               navigate("/");
@@ -103,7 +102,7 @@ const Signup = () => {
               });
             } else {
               toast({
-                title: json.error,
+                title: json.message.toString(),
                 status: "error",
                 position: "top",
                 duration: 2000,
@@ -164,7 +163,7 @@ const Signup = () => {
           )}
         </Formik>
         <Link to="/login">
-          Already Signed Up! Log{" "}
+          Already Signed Up! Log in{" "}
           <Text
             display={"inline"}
             textColor={"blue.500"}

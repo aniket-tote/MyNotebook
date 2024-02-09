@@ -66,7 +66,7 @@ const Login = () => {
             const response = await fetch(
               `${
                 import.meta.env.VITE_REACT_APP_SERVER_BASE_URL
-              }/api/auth/login`,
+              }/auth/login`,
               {
                 method: "POST",
                 headers: {
@@ -81,12 +81,11 @@ const Login = () => {
             const json = await response.json();
             actions.setSubmitting(false);
 
-            console.log(json);
             if (json.success) {
               localStorage.setItem("token", json.authtoken);
               navigate("/");
               toast({
-                title: "Welcome back!",
+                title: json.message.toString(),
                 status: "success",
                 position: "top",
                 duration: 2000,
@@ -94,7 +93,7 @@ const Login = () => {
               });
             } else {
               toast({
-                title: json.error,
+                title: json.message.toString(),
                 status: "error",
                 position: "top",
                 duration: 2000,
